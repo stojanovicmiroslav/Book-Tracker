@@ -37,6 +37,7 @@ public class ReadingList {
 
 
     @OneToMany
+    @JsonIgnore
     private Set<Book> book;
 
 }

@@ -64,21 +64,5 @@ public class AuthenticationController {
 
 
 
-// /auth/reset-password - POST
-// ova ruta prima email
-// i ona ce na taj email da posalje link za promenu sifre
-
-//    @PostMapping("/reset-password")
-//    public ResponseEntity<Task> resetPassword(@RequestBody String email){
-//        Optional<User> userOptional = userService.findByEmail(email);
-//        if (userOptional.isEmpty()) {
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
-//        User user = userOptional.get();
-//        // TODO Ovde da nastavim
-//        return new  ResponseEntity<>( HttpStatus.OK);
-//    }
-
-
 
 }

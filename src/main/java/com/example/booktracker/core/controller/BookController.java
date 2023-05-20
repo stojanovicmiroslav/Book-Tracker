@@ -17,7 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 @RequestMapping("/api/v1/books")
 public class BookController {
-
+// only Admin can Create, Delete and Update one book
 
     private final BookServiceImpl bookService;
 
@@ -62,6 +62,7 @@ public class BookController {
 
     // Delete an existing book by id
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Book> deleteBookById(@PathVariable Long id) {
         Book existingBook = bookService.getBookById(id);
         if (existingBook != null) {

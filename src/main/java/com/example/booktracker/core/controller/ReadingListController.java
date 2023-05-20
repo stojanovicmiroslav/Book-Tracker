@@ -6,6 +6,7 @@ import com.example.booktracker.core.service.Impl.ReadingListServiceImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -30,6 +31,7 @@ public class ReadingListController {
 
     // Get a single reading list by id
     @GetMapping("/{id}")
+    @PreAuthorize("!@permission.checkUserIdOwnership(#id)")
     public ResponseEntity<ReadingList> getReadingListById(@PathVariable Long id) {
         ReadingList readingList = readingListService.getReadingListById(id);
         if (readingList != null) {
@@ -41,6 +43,7 @@ public class ReadingListController {
 
     // Update an existing reading list
     @PutMapping("/{id}")
+    @PreAuthorize("!@permission.checkUserIdOwnership(#id)")
     public ResponseEntity<ReadingList> updateReadingList(@PathVariable Long id, @RequestBody ReadingList readingList) {
         ReadingList existingReadingList = readingListService.getReadingListById(id);
         if (existingReadingList != null) {
@@ -54,6 +57,7 @@ public class ReadingListController {
 
     // Delete an existing reading list by id
     @DeleteMapping("/{id}")
+    @PreAuthorize("!@permission.checkUserIdOwnership(#id)")
     public ResponseEntity<ReadingList> deleteReadingListById(@PathVariable Long id) {
         ReadingList existingReadingList = readingListService.getReadingListById(id);
         if (existingReadingList != null) {
@@ -65,7 +69,7 @@ public class ReadingListController {
     }
 
     // Add a book to a reading list
-    @PostMapping("/{readingListId}/books")
+    @PostMapping("/{readingListId}/addBokk")
     public ResponseEntity<Book> addBookToReadingList(@PathVariable Long readingListId, @RequestBody Book book) {
         ReadingList readingList = readingListService.getReadingListById(readingListId);
         if (readingList != null) {
