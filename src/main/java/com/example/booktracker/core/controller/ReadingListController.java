@@ -1,7 +1,9 @@
 package com.example.booktracker.core.controller;
 
+import com.example.booktracker.core.DTO.BookNumberIdDTO;
 import com.example.booktracker.core.model.Book;
 import com.example.booktracker.core.model.ReadingList;
+import com.example.booktracker.core.service.Impl.BookServiceImpl;
 import com.example.booktracker.core.service.Impl.ReadingListServiceImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -9,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
 
 import java.util.List;
 import java.util.Set;
@@ -21,9 +22,11 @@ public class ReadingListController {
 
 
     private final ReadingListServiceImpl readingListService;
+    private final BookServiceImpl bookService;
 
     // Get all reading lists
     @GetMapping
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<List<ReadingList>> getAllReadingLists() {
         List<ReadingList> readingLists = readingListService.getAllReadingLists();
         return new ResponseEntity<>(readingLists, HttpStatus.OK);
@@ -69,10 +72,12 @@ public class ReadingListController {
     }
 
     // Add a book to a reading list
-    @PostMapping("/{readingListId}/addBokk")
-    public ResponseEntity<Book> addBookToReadingList(@PathVariable Long readingListId, @RequestBody Book book) {
+    @PostMapping("/addBook/{readingListId}")
+    @PreAuthorize("@permission.checkUserReadinListOwnership(#readingListId)")
+    public ResponseEntity<Book> addBookToReadingList(@PathVariable Long readingListId, @RequestBody BookNumberIdDTO bookId) {
         ReadingList readingList = readingListService.getReadingListById(readingListId);
-        if (readingList != null) {
+        Book book = bookService.getBookById(bookId.getBookId());
+        if (readingList != null && book !=null) {
             Set<Book> books = readingList.getBook();
             books.add(book);
             readingList.setBook(books);

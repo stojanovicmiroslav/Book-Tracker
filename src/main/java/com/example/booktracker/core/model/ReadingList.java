@@ -36,7 +36,7 @@ public class ReadingList {
     private User user;
 
 
-    @OneToMany
+    @OneToMany(cascade =  CascadeType.ALL)
     @JsonIgnore
     private Set<Book> book;
 

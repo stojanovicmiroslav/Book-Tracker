@@ -15,6 +15,9 @@ import java.util.Optional;
 @Slf4j
 public class BookServiceImpl {
     private final BookRepository bookRepository;
+    public Optional<Book> findBookById(Long id){
+        return bookRepository.findById(id);
+    }
 
     public List<Book> getAllBooks() {
         return bookRepository.findAll();

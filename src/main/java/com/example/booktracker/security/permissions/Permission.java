@@ -1,6 +1,8 @@
 package com.example.booktracker.security.permissions;
 
 
+import com.example.booktracker.core.model.ReadingList;
+import com.example.booktracker.core.repository.ReadingListRepository;
 import com.example.booktracker.security.model.User;
 import com.example.booktracker.security.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -15,6 +17,7 @@ public class Permission {
 
 
    private final UserRepository userRepository;
+   private final ReadingListRepository readingListRepository;
 
 
 
@@ -36,6 +39,19 @@ public class Permission {
         return false;
     }
 
+
+    public boolean checkUserReadinListOwnership(Long readingListId) {
+        String loggedInUserUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        Optional<ReadingList> readingListOptional = readingListRepository.findById(readingListId);
+
+        if (readingListOptional.isPresent()) {
+            ReadingList readingList = readingListOptional.get();
+
+            return readingList.getUser().getUsername().equals(loggedInUserUsername);
+        }
+        return false;
+    }
 
 
 
